@@ -1,92 +1,208 @@
-swagger: '2.0'
+openapi: "3.0.0"
 info:
   version: 1.0.0
-  title: "hack-camp_vol13_server"
+  title: hack-camp_vol13_server
+  description: hack-camp_vol13 の API
+
+tags:
+  - name: user
+    description: user API
+  - name: threads
+    description: threads API
+
 paths:
-  'api/v1/user/{uid}':
+  /api/v1/user/{uid}:
     get:
-      description: uidでユーザー情報取得 (FindUserById)
+      summary: ID指定での質問の取得
+      tags:
+        - user
       parameters:
-      - name: uid
-        in: path
-        description: user id
-        required: true
-        type: string
-
-      responses:
-        '200':
-          description: 成功
+        - name: uid
+          description: user id
+          in: path
+          required: true
           schema:
-            type: object
-            properties:
-              uid:
-                type: string
-              user_name:
-                type: string
-              image_url:
-                type: string
-              comment:
-                type: string
-              location:
-                type: string
-              twitter:
-                type: string
-              github:
-                type: string
-              url:
-                type: string
-              follow:
-                type: integer
-              follower:
-                type: integer
-              Thread: 
-                type: array
-
-  'api/v1/user':
+            $ref: "#/components/schemas/uid"
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userContent"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+  /api/v1/user:
     post:
-      description: user作成
-      parameters:
-      - name: uid
-        description: user id
+      summary: 新規user作成
+      tags:
+        - user
+        
+      requestBody:
         required: true
-        type: string
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userBody'
+              
 
-      - name: user_name
-        description: user name
-        required: true
-        type: string
-
-      - name: image_url
-        description: profile image url
-        required: true
-        type: string
-
+          
       responses:
-        '200':
+        200:
           description: 成功
-          schema:
-            type: object
-            properties:
-              uid:
-                type: string
-              user_name:
-                type: string
-              image_url:
-                type: string
-              comment:
-                type: string
-              location:
-                type: string
-              twitter:
-                type: string
-              github:
-                type: string
-              url:
-                type: string
-              follow:
-                type: integer
-              follower:
-                type: integer
-              Thread: 
+          content:
+            application/json:
+              schema:
                 type: array
-  
+                items:
+                  $ref: "#/components/schemas/userContent"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+                
+                
+                
+  /api/v1/users:
+    get:
+      summary: userをすべて返す
+      tags:
+        - user
+        
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                
+                items:
+                  $ref: "#/components/schemas/usersContent"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+
+  #   get:
+  #     summary: 質問の作成
+  #     tags:
+  #       - user
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: "#/components/schemas/PostQuestion"
+  #     responses:
+  #       200:
+  #         description: 成功
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/QuestionContent"
+  #       400:
+  #         description: 失敗
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/BadRequest"
+
+  # /answer:
+  #   put:
+  #     summary: 回答の登録
+  #     tags:
+  #       - answer
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: "#/components/schemas/PutAnswer"
+  #     responses:
+  #       200:
+  #         description: 成功
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/AnswerContent"
+
+components:
+  schemas:
+    uid:
+      type: string
+      description: "user id"
+
+    userContent:
+      type: object
+      properties:
+        uid:
+          type: string
+          example: ahse436gh4uhawer
+        user_name:
+          type: string
+          example: hoge
+        image_url:
+          type: string
+          example: http://hogehoge.com
+        comment:
+          type: string
+          example: pythonが大好き
+        location:
+          type: string
+          example: ""
+        twitter:
+          type: string
+          example: ""
+        github:
+          type: string
+          example:  https://github.com/hoge
+        url:
+          type: string
+          example: ""
+        follow:
+          type: integer
+          example: 123
+        follower:
+          type: integer
+          example: 37
+        Thread: 
+          type: array
+          items:
+            type: string
+          example: [{},{},{}]
+          
+    userBody:
+      type: object
+      properties:
+        uid:
+          type: string
+          example: a38ty89haeh
+        user_name:
+          type: string
+          example: "hoge"
+        image_url:
+          type: string
+          example: http://hogehoge.com
+          
+    usersContent:
+      type: object
+      items:
+        type: string
+      example: userContentの配列
+      
+          
+
+          
+
+    BadRequest:
+      type: object
+      properties:
+        400:
+          type: string
+          example: "リクエストが不正です"
