@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: 1.0.0
-  title: hack-camp_vol13_server
+  title: "hack-camp_vol13_server"
 paths:
   'api/v1/user/{uid}':
     get:
