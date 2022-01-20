@@ -205,4 +205,4 @@ components:
       properties:
         400:
           type: string
-          example: "リクエストが不正です"
+          example: "リクエストが不正です."
