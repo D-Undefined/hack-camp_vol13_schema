@@ -2,5 +2,5 @@
 
 
 ```
-redoc-cli bundle docs/swagger.yaml -o dist/docs/index.html
+redoc-cli bundle docs/swagger.yaml -o docs/dist/index.html
 ```
