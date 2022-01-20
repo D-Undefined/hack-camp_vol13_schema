@@ -39,54 +39,54 @@ paths:
                 type: integer
               follower:
                 type: integer
-  #             Thread: 
-  #               type: array
+              Thread: 
+                type: array
 
-  # 'api/v1/user':
-  #   post:
-  #     description: user作成
-  #     parameters:
-  #     - name: uid
-  #       description: user id
-  #       required: true
-  #       type: string
+  'api/v1/user':
+    post:
+      description: user作成
+      parameters:
+      - name: uid
+        description: user id
+        required: true
+        type: string
 
-  #     - name: user_name
-  #       description: user name
-  #       required: true
-  #       type: string
+      - name: user_name
+        description: user name
+        required: true
+        type: string
 
-  #     - name: image_url
-  #       description: profile image url
-  #       required: true
-  #       type: string
+      - name: image_url
+        description: profile image url
+        required: true
+        type: string
 
-  #     responses:
-  #       '200':
-  #         description: 成功
-  #         schema:
-  #           type: object
-  #           properties:
-  #             uid:
-  #               type: string
-  #             user_name:
-  #               type: string
-  #             image_url:
-  #               type: string
-  #             comment:
-  #               type: string
-  #             location:
-  #               type: string
-  #             twitter:
-  #               type: string
-  #             github:
-  #               type: string
-  #             url:
-  #               type: string
-  #             follow:
-  #               type: integer
-  #             follower:
-  #               type: integer
-  #             Thread: 
-  #               type: array
+      responses:
+        '200':
+          description: 成功
+          schema:
+            type: object
+            properties:
+              uid:
+                type: string
+              user_name:
+                type: string
+              image_url:
+                type: string
+              comment:
+                type: string
+              location:
+                type: string
+              twitter:
+                type: string
+              github:
+                type: string
+              url:
+                type: string
+              follow:
+                type: integer
+              follower:
+                type: integer
+              Thread: 
+                type: array
   
