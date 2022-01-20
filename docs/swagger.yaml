@@ -42,7 +42,7 @@ paths:
               Thread: 
                 type: array
 
-  'api/v1/user'
+  'api/v1/user':
     post:
       description: user作成
       parameters:
