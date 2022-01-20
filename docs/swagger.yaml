@@ -1,24 +1,92 @@
 swagger: '2.0'
 info:
   version: 1.0.0
-  title: タイトル
+  title: hack-camp_vol13_server
 paths:
-  '/user/{id}':
+  'api/v1/user/{uid}':
     get:
-      description: ユーザー情報取得
+      description: uidでユーザー情報取得 (FindUserById)
       parameters:
-      - name: id
+      - name: uid
         in: path
         description: user id
         required: true
-        type: number
+        type: string
+
       responses:
         '200':
           description: 成功
           schema:
             type: object
             properties:
-              id:
-                type: integer
-              username:
+              uid:
                 type: string
+              user_name:
+                type: string
+              image_url:
+                type: string
+              comment:
+                type: string
+              location:
+                type: string
+              twitter:
+                type: string
+              github:
+                type: string
+              url:
+                type: string
+              follow:
+                type: integer
+              follower:
+                type: integer
+              Thread: 
+                type: array
+
+  'api/v1/user'
+    post:
+      description: user作成
+      parameters:
+      - name: uid
+        description: user id
+        required: true
+        type: string
+
+      - name: user_name
+        description: user name
+        required: true
+        type: string
+
+      - name: image_url
+        description: profile image url
+        required: true
+        type: string
+
+      responses:
+        '200':
+          description: 成功
+          schema:
+            type: object
+            properties:
+              uid:
+                type: string
+              user_name:
+                type: string
+              image_url:
+                type: string
+              comment:
+                type: string
+              location:
+                type: string
+              twitter:
+                type: string
+              github:
+                type: string
+              url:
+                type: string
+              follow:
+                type: integer
+              follower:
+                type: integer
+              Thread: 
+                type: array
+  
