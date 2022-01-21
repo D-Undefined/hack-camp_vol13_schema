@@ -15,6 +15,29 @@ tags:
     description: commentに対するgood/badの投票用API
 paths:
 
+  /api/v1/users:
+    get:
+      summary: userすべて取得 (取得個数制限まだかけてない)
+      description: フロントかバックで取得個数の制限かけたほうが良いかも
+      tags:
+        - user
+        
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/userContent"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+                
   /api/v1/user:
     post:
       summary: 新規user作成
@@ -143,7 +166,7 @@ paths:
                
                
   /api/v1/threads:
-    post:
+    get:
       summary: threadすべて取得 (取得個数制限まだかけてない)
       description: フロントかバックで取得個数の制限かけたほうが良いかも
       tags:
@@ -594,13 +617,7 @@ components:
           type: string
           example: true
     
-          
-          
-
-        
-       
-          
-
+      
           
 
     DeleteResponse:
@@ -615,3 +632,5 @@ components:
         400:
           type: string
           example: "リクエストが不正です"
+          
+          
