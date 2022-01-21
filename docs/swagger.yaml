@@ -6,11 +6,44 @@ info:
 
 tags:
   - name: user
-    description: user API
-  - name: threads
-    description: threads API
-
+    description: user (CRUD) API
+  - name: thread
+    description: threads (CRUD) API
+  - name: comment
+    description: comments (Create,Dlete) API
+  - name: comment_vote
+    description: commentに対するgood/badの投票用API
 paths:
+
+  /api/v1/user:
+    post:
+      summary: 新規user作成
+      tags:
+        - user
+        
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userBody'
+              
+
+          
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userContent"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+                
   /api/v1/user/{uid}:
     get:
       summary: ID指定での質問の取得
@@ -36,18 +69,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BadRequest"
-  /api/v1/user:
-    post:
-      summary: 新規user作成
+    put:
+      summary: userの更新
       tags:
         - user
-        
+      parameters:
+        - name: uid
+          description: user id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/uid"
       requestBody:
         required: true
+        description: 更新したいデータのみ用意
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/userBody'
+              $ref: '#/components/schemas/userContent'
               
 
           
@@ -65,15 +104,50 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BadRequest"
-                
-                
-                
-  /api/v1/users:
-    get:
-      summary: userをすべて返す
+                $ref: "#/components/schemas/BadRequest" 
+    
+    
+    
+    delete:
+      summary: userの削除
+      description: uidで削除したいuserのuidを指定
       tags:
         - user
+      parameters:
+        - name: uid
+          description: user id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/uid"
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteResponse"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest" 
+                
+                
+                
+
+
+
+               
+               
+               
+  /api/v1/threads:
+    post:
+      summary: threadすべて取得 (取得個数制限まだかけてない)
+      description: フロントかバックで取得個数の制限かけたほうが良いかも
+      tags:
+        - thread
         
       responses:
         200:
@@ -81,9 +155,261 @@ paths:
           content:
             application/json:
               schema:
-                
+                type: array
                 items:
-                  $ref: "#/components/schemas/usersContent"
+                  $ref: "#/components/schemas/threadsContent"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+               
+               
+  /api/v1/thread:
+    post:
+      summary: 新規thread作成
+      tags:
+        - thread
+        
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/threadBody'
+              
+
+          
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/threadContent"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"                 
+               
+                
+  /api/v1/thread/{id}:
+    get:
+      summary: ID指定でのthreadの取得
+      tags:
+        - thread
+      parameters:
+        - name: id
+          description: thread id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/threadId"
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/threadContent"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+                
+    put:
+      summary: threadの更新
+      tags:
+        - thread
+      description: 更新したいデータのみ用意 voteなども更新できてしまうため要注意
+      parameters:
+        - name: id
+          description: thread id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/threadId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/threadBody'
+              
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/threadContent"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+    delete:
+      summary: thread削除
+      description: idで削除したいthreadのidを指定
+      tags:
+        - thread
+      parameters:
+        - name: id
+          description: thread id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/threadId"
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteResponse"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+                
+                
+              
+              
+              
+              
+              
+              
+              
+              
+
+
+
+
+
+
+  /api/v1/comment:
+    post:
+      summary: 新規comment作成
+      tags:
+        - comment
+        
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/commentBody'
+              
+
+          
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/threadContent"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"                 
+               
+                
+  /api/v1/comment/{id}:
+    delete:
+      summary: comment削除
+      description: idで削除したいcommentのidを指定
+      tags:
+        - comment
+      parameters:
+        - name: id
+          description: comment id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/commentId"
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteResponse"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+                
+                
+                
+                
+                
+                
+                
+                
+                
+
+
+
+
+  /api/v1/comment_vote:
+    post:
+      summary: 投票(good/bad)
+      tags:
+        - comment_vote
+      description: "bodyのis_upがtrueのときgood / falseのときbad"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/commentVoteBody'
+              
+
+          
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteResponse"
+        400:
+          description: 失敗
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"                 
+               
+              
+    delete:
+      summary: comment削除
+      description: 
+        DELETEにrequestbodyかけないのでここに書く.
+        POSTと同じものをbodyにいれてね.   
+        URLにid埋め込むのもありかも
+      tags:
+        - comment_vote
+
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteResponse"
         400:
           description: 失敗
           content:
@@ -91,46 +417,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/BadRequest"
 
-  #   get:
-  #     summary: 質問の作成
-  #     tags:
-  #       - user
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: "#/components/schemas/PostQuestion"
-  #     responses:
-  #       200:
-  #         description: 成功
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: "#/components/schemas/QuestionContent"
-  #       400:
-  #         description: 失敗
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: "#/components/schemas/BadRequest"
 
-  # /answer:
-  #   put:
-  #     summary: 回答の登録
-  #     tags:
-  #       - answer
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: "#/components/schemas/PutAnswer"
-  #     responses:
-  #       200:
-  #         description: 成功
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: "#/components/schemas/AnswerContent"
+
+
+
+
+
 
 components:
   schemas:
@@ -150,7 +442,7 @@ components:
         image_url:
           type: string
           example: http://hogehoge.com
-        comment:
+        bio:
           type: string
           example: pythonが大好き
         location:
@@ -171,6 +463,9 @@ components:
         follower:
           type: integer
           example: 37
+        belong:
+          type: string
+          example: 同志社大学
         Thread: 
           type: array
           items:
@@ -189,17 +484,131 @@ components:
         image_url:
           type: string
           example: http://hogehoge.com
-          
-    usersContent:
-      type: object
-      items:
-        type: string
-      example: userContentの配列
+    
+    threadId: 
+      type: integer
+      description: "thread id"
+    
+
       
+    threadBody:
+      type: object
+      properties:
+        uid:
+          type: string
+          example: a38ty89haeh
+        name:
+          type: string
+          example: "Pythonはオワコンなのか"
+
+      
+    
+    threadContent:      
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Pythonはオワコンなのか"
+        vote_cnt:
+          type: integer
+          example: 32
+        vote:
+          type: string
+          example: null
+        user_id:
+          type: string
+          example: ahse436gh4uhawer
+        created_at:
+          type: string
+          example: "2022-01-21T15:53:51.18257+09:00"
+        comment_cnt:
+          type: integer
+          example: 231
+        Comments:
+          type: array
+          items:
+            type: string
+          example: [{},{},{}]
+    
+    threadsContent:      
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Pythonはオワコンなのか"
+        vote_cnt:
+          type: integer
+          example: 32
+        vote:
+          type: string
+          example: null
+        user_id:
+          type: string
+          example: ahse436gh4uhawer
+        created_at:
+          type: string
+          example: "2022-01-21T15:53:51.18257+09:00"
+        comment_cnt:
+          type: integer
+          example: 231
+        Comments:
+          type: string
+          example: null 
+          
+    
+    commentId: 
+      type: integer
+      description: "comment id"
+          
+    commentBody:
+      type: object
+      properties:
+        thread_id:
+          type: integer
+          example: 1
+        uid: 
+          type: string
+          example: ahse436gh4uhawer
+        body:
+          type: string
+          example: "オワコンなわけないでしょ！！"
+    
+    
+    
+    commentVoteBody:
+      type: object
+      properties:
+        uid:
+          type: string
+          example: ahse436gh4uhawer
+        comment_id: 
+          type: integer
+          example: 1
+        is_up:
+          type: string
+          example: true
+    
+          
+          
+
+        
+       
           
 
           
 
+    DeleteResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "ok"
     BadRequest:
       type: object
       properties:
